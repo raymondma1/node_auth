@@ -25,25 +25,20 @@ exports.signup = function(req,res,next){
   User.findOne({ email: email }, function(err, existingUser){
     if(err) { return next(err); }
     
-    if(existingUser){
+    else if(existingUser){
       return res.status(422).send({error: 'Email is in use'});
     }
   })
   
   const user = new User({
     email: email,
-    passsword: password
+    password: password
   });
   
   user.save(function(err){
-    if(err){ return next(err); }
-    
+    if(err){ return next(err); }    
     //respond to request indicating hte user was created
-    res.json({ token:tokenForUser(user) });
+    return res.json({ token:tokenForUser(user) });
   })
   
-  res.json(user)
-  //if a user with email deos exist, return error
-  
-  //response to request.
 }
